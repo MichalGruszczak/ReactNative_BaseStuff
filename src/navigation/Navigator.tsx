@@ -11,7 +11,7 @@ import TodoStack from "./stacks/TodoStack";
 // TODO - Zustand Provider with Auth state
 // TODO - LOGOUT
 
-const isAuth = true;
+const isAuth = false;
 
 const Tab = createBottomTabNavigator();
 
