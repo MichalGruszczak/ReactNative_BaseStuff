@@ -78,39 +78,18 @@ const Register = () => {
           name="name"
           error={errors.name}
           placeholder="Name"
-          // rules={{
-          //   required: "Name is required",
-          //   minLength: {
-          //     value: 3,
-          //     message: "Name must have at least 3 characters",
-          //   },
-          // }}
           control={control}
         />
         <CustomInput
           name="email"
           error={errors.email}
           placeholder="Email"
-          // rules={{
-          //   required: "Email is required",
-          //   pattern: {
-          //     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-          //     message: "Invalid email address",
-          //   },
-          // }}
           control={control}
         />
         <CustomInput
           name="password"
           error={errors.password}
           placeholder="Password"
-          // rules={{
-          //   required: "Password is required",
-          //   minLength: {
-          //     value: 3,
-          //     message: "Name must have at least 3 characters",
-          //   },
-          // }}
           control={control}
           secureTextEntry
         />
@@ -118,13 +97,6 @@ const Register = () => {
           name="confirmPassword"
           error={errors.confirmPassword}
           placeholder="Confirm password"
-          // rules={{
-          //   required: "Password is required",
-          //   minLength: {
-          //     value: 3,
-          //     message: "Name must have at least 3 characters",
-          //   },
-          // }}
           control={control}
           secureTextEntry
         />

@@ -6,7 +6,6 @@ type CustomInputProps = {
   control: any;
   name: string;
   error: any;
-  rules?: object;
   placeholder?: string;
   secureTextEntry?: boolean;
 };
@@ -15,7 +14,6 @@ const CustomInput = ({
   control,
   name,
   error,
-  rules = {},
   placeholder,
   secureTextEntry = false,
 }: CustomInputProps) => {
@@ -23,7 +21,6 @@ const CustomInput = ({
     <Controller
       control={control}
       name={name}
-      rules={rules}
       render={({ field: { value, onChange, onBlur } }) => (
         <>
           <View
