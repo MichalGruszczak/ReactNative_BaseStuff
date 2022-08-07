@@ -1,66 +1,113 @@
-import CheckBox from "@react-native-community/checkbox";
+import { CheckBox } from "@rneui/themed";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import {
   KeyboardAvoidingView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import uuid from "react-native-uuid";
+
+import CustomInput from "../../components/CustomInput/CustomInput";
+
+type RegisterFormData = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+type RegistrationData = {
+  name: string;
+  email: string;
+  password: string;
+  id: string;
+  isAdmin: boolean;
+};
 
 const Register = () => {
-  const [name, setName] = useState("");
-  const [city, setCity] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isAdminSelected, setIsAdminSelected] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const handleRegister = () => {
-    console.log("Register");
+  const { control, handleSubmit, reset } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  });
+
+  const handleRegister = (data: RegisterFormData) => {
+    const registrationData: RegistrationData = {
+      ...data,
+      id: uuid.v4() as string,
+      isAdmin,
+    };
+
+    // TODO - registration logic from Firebase
+    console.log(registrationData);
+
+    reset({
+      name: "",
+      email: "",
+      password: "",
+    });
   };
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Text>Register Screen</Text>
       <View style={styles.inputContainer}>
-        <TextInput
+        <CustomInput
+          name="name"
           placeholder="Name"
-          value={name}
-          onChangeText={(text) => setName(text)}
-          style={styles.input}
+          rules={{
+            required: "Name is required",
+            minLength: {
+              value: 3,
+              message: "Name must have at least 3 characters",
+            },
+          }}
+          control={control}
         />
-        <TextInput
-          placeholder="City"
-          value={city}
-          onChangeText={(text) => setCity(text)}
-          style={styles.input}
-        />
-        <TextInput
+        <CustomInput
+          name="email"
           placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
+          rules={{
+            required: "Email is required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Invalid email address",
+            },
+          }}
+          control={control}
         />
-        <TextInput
+        <CustomInput
+          name="password"
           placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
+          rules={{
+            required: "Password is required",
+            minLength: {
+              value: 3,
+              message: "Name must have at least 3 characters",
+            },
+          }}
+          control={control}
           secureTextEntry
         />
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            value={isAdminSelected}
-            onValueChange={setIsAdminSelected}
-            style={styles.checkbox}
-          />
-          <Text style={styles.label}>Are you Admin?</Text>
-        </View>
+        <CheckBox
+          center
+          title="Click Here"
+          checked={isAdmin}
+          onPress={() => setIsAdmin(!isAdmin)}
+        />
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleRegister} style={styles.button}>
+        <TouchableOpacity
+          onPress={handleSubmit(handleRegister)}
+          style={styles.button}
+        >
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
       </View>
@@ -79,13 +126,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginTop: 10,
     width: "80%",
-  },
-  input: {
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
   },
   buttonContainer: {
     width: "60%",
@@ -115,15 +155,5 @@ const styles = StyleSheet.create({
     color: "#0782F9",
     fontWeight: "700",
     fontSize: 16,
-  },
-  checkboxContainer: {
-    marginTop: 20,
-    flexDirection: "row",
-  },
-  checkbox: {
-    alignSelf: "center",
-  },
-  label: {
-    margin: 8,
   },
 });

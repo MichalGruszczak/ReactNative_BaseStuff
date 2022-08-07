@@ -1,13 +1,16 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import Navigator from "./src/navigation/Navigator";
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Navigator />
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Navigator />
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 };
 
