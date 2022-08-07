@@ -1,4 +1,3 @@
-import CheckBox from "@react-native-community/checkbox";
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
