@@ -5,6 +5,7 @@ import { View, Text, TextInput, StyleSheet } from "react-native";
 type CustomInputProps = {
   control: any;
   name: string;
+  error: any;
   rules?: object;
   placeholder?: string;
   secureTextEntry?: boolean;
@@ -13,6 +14,7 @@ type CustomInputProps = {
 const CustomInput = ({
   control,
   name,
+  error,
   rules = {},
   placeholder,
   secureTextEntry = false,
@@ -22,10 +24,7 @@ const CustomInput = ({
       control={control}
       name={name}
       rules={rules}
-      render={({
-        field: { value, onChange, onBlur },
-        fieldState: { error },
-      }) => (
+      render={({ field: { value, onChange, onBlur } }) => (
         <>
           <View
             style={[

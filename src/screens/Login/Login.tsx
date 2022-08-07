@@ -1,5 +1,6 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -7,46 +8,60 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import * as Yup from "yup";
 
 import CustomInput from "../../components/CustomInput/CustomInput";
 
-type LoginFormData = {
-  email: string;
-  password: string;
-};
+const loginFormSchema = Yup.object().shape({
+  email: Yup.string()
+    .required("Email is required")
+    .matches(
+      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+      "Invalid email address"
+    ),
+  password: Yup.string().required("Password is required"),
+});
+
+const validationOptions = { resolver: yupResolver(loginFormSchema) };
 
 const Login = () => {
-  const { control, handleSubmit } = useForm({
-    defaultValues: {
+  const { control, handleSubmit, formState, reset } =
+    useForm(validationOptions);
+
+  const { errors } = formState;
+
+  // TODO - with Firebase
+  const handleLogin = (data: FieldValues) => {
+    console.log(JSON.stringify(data, null, 4));
+    reset({
       email: "",
       password: "",
-    },
-  });
-  // TODO - with Firebase
-  const handleLogin = (data: LoginFormData) => console.log(data);
+    });
+  };
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Text>Login Screen</Text>
       <View style={styles.inputContainer}>
-        {/*  */}
         <CustomInput
           name="email"
+          error={errors.email}
           placeholder="Email"
-          rules={{
-            required: "Email is required",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Invalid email address",
-            },
-          }}
+          // rules={{
+          //   required: "Email is required",
+          //   pattern: {
+          //     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+          //     message: "Invalid email address",
+          //   },
+          // }}
           control={control}
         />
-        {/*  */}
+
         <CustomInput
           name="password"
+          error={errors.password}
           placeholder="Password"
-          rules={{ required: "Password is required" }}
+          // rules={{ required: "Password is required" }}
           control={control}
           secureTextEntry
         />
