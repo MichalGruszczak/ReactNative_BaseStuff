@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-// import { v4 as uuidv4 } from "uuid";
+import uuid from "react-native-uuid";
 
 import CustomInput from "../../components/CustomInput/CustomInput";
 
@@ -19,9 +19,18 @@ type RegisterFormData = {
   confirmPassword: string;
 };
 
+type RegistrationData = {
+  name: string;
+  email: string;
+  password: string;
+  id: string;
+  isAdmin: boolean;
+};
+
 const Register = () => {
   const [isAdmin, setIsAdmin] = useState(false);
-  const { control, handleSubmit } = useForm({
+
+  const { control, handleSubmit, reset } = useForm({
     defaultValues: {
       name: "",
       email: "",
@@ -30,8 +39,23 @@ const Register = () => {
     },
   });
 
-  // TODO - with Firebase
-  const handleRegister = (data: RegisterFormData) => console.log(data);
+  const handleRegister = (data: RegisterFormData) => {
+    const registrationData: RegistrationData = {
+      ...data,
+      id: uuid.v4() as string,
+      isAdmin,
+    };
+
+    // TODO - registration logic from Firebase
+    console.log(registrationData);
+
+    reset({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+  };
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -83,16 +107,12 @@ const Register = () => {
           control={control}
           secureTextEntry
         />
-        {/*  */}
-        {/*  */}
         <CheckBox
           center
           title="Click Here"
           checked={isAdmin}
           onPress={() => setIsAdmin(!isAdmin)}
         />
-        {/*  */}
-        {/*  */}
       </View>
 
       <View style={styles.buttonContainer}>
