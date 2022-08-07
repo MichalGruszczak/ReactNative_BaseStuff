@@ -1,6 +1,7 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { CheckBox } from "@rneui/themed";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -9,14 +10,9 @@ import {
   View,
 } from "react-native";
 import uuid from "react-native-uuid";
+import * as Yup from "yup";
 
 import CustomInput from "../../components/CustomInput/CustomInput";
-
-type RegisterFormData = {
-  name: string;
-  email: string;
-  password: string;
-};
 
 type RegistrationData = {
   name: string;
@@ -26,20 +22,39 @@ type RegistrationData = {
   isAdmin: boolean;
 };
 
+const registerFormSchema = Yup.object().shape({
+  name: Yup.string()
+    .required("Name is required")
+    .min(3, "Name length should be at least 3 characters"),
+  email: Yup.string()
+    .required("Email is required")
+    .matches(
+      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+      "Invalid email address"
+    ),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password length should be at least 6 characters"),
+  confirmPassword: Yup.string()
+    .required("Confirm Password is required")
+    .oneOf([Yup.ref("password")], "Passwords must and should match"),
+});
+
+const validationOptions = { resolver: yupResolver(registerFormSchema) };
+
 const Register = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const { control, handleSubmit, reset } = useForm({
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
-  });
+  const { control, handleSubmit, reset, formState } =
+    useForm(validationOptions);
 
-  const handleRegister = (data: RegisterFormData) => {
+  const { errors } = formState;
+
+  const handleRegister = (data: FieldValues) => {
     const registrationData: RegistrationData = {
-      ...data,
+      name: data.name,
+      email: data.email,
+      password: data.password,
       id: uuid.v4() as string,
       isAdmin,
     };
@@ -51,6 +66,7 @@ const Register = () => {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     });
   };
 
@@ -60,38 +76,27 @@ const Register = () => {
       <View style={styles.inputContainer}>
         <CustomInput
           name="name"
+          error={errors.name}
           placeholder="Name"
-          rules={{
-            required: "Name is required",
-            minLength: {
-              value: 3,
-              message: "Name must have at least 3 characters",
-            },
-          }}
           control={control}
         />
         <CustomInput
           name="email"
+          error={errors.email}
           placeholder="Email"
-          rules={{
-            required: "Email is required",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Invalid email address",
-            },
-          }}
           control={control}
         />
         <CustomInput
           name="password"
+          error={errors.password}
           placeholder="Password"
-          rules={{
-            required: "Password is required",
-            minLength: {
-              value: 3,
-              message: "Name must have at least 3 characters",
-            },
-          }}
+          control={control}
+          secureTextEntry
+        />
+        <CustomInput
+          name="confirmPassword"
+          error={errors.confirmPassword}
+          placeholder="Confirm password"
           control={control}
           secureTextEntry
         />
