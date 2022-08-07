@@ -1,4 +1,5 @@
-import React from "react";
+import { CheckBox } from "@rneui/themed";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   KeyboardAvoidingView,
@@ -16,17 +17,16 @@ type RegisterFormData = {
   email: string;
   password: string;
   confirmPassword: string;
-  isAdmin: any;
 };
 
 const Register = () => {
+  const [isAdmin, setIsAdmin] = useState(false);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       name: "",
       email: "",
       password: "",
       confirmPassword: "",
-      isAdmin: false,
     },
   });
 
@@ -85,7 +85,12 @@ const Register = () => {
         />
         {/*  */}
         {/*  */}
-
+        <CheckBox
+          center
+          title="Click Here"
+          checked={isAdmin}
+          onPress={() => setIsAdmin(!isAdmin)}
+        />
         {/*  */}
         {/*  */}
       </View>
