@@ -16,7 +16,6 @@ type RegisterFormData = {
   name: string;
   email: string;
   password: string;
-  confirmPassword: string;
 };
 
 type RegistrationData = {
@@ -35,7 +34,6 @@ const Register = () => {
       name: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
@@ -53,7 +51,6 @@ const Register = () => {
       name: "",
       email: "",
       password: "",
-      confirmPassword: "",
     });
   };
 
@@ -94,15 +91,6 @@ const Register = () => {
               value: 3,
               message: "Name must have at least 3 characters",
             },
-          }}
-          control={control}
-          secureTextEntry
-        />
-        <CustomInput
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          rules={{
-            required: "Please confirm password",
           }}
           control={control}
           secureTextEntry
