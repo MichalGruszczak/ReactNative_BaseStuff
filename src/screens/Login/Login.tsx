@@ -1,42 +1,62 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import {
   KeyboardAvoidingView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+import CustomInput from "../../components/CustomInput/CustomInput";
 
-  const handleLogin = () => {
-    console.log("Login");
-  };
+type LoginFormData = {
+  email: string;
+  password: string;
+};
+
+const Login = () => {
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  // TODO - with Firebase
+  const handleLogin = (data: LoginFormData) => console.log(data);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Text>Login Screen</Text>
       <View style={styles.inputContainer}>
-        <TextInput
+        {/*  */}
+        <CustomInput
+          name="email"
           placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
+          rules={{
+            required: "Email is required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Invalid email address",
+            },
+          }}
+          control={control}
         />
-        <TextInput
+        {/*  */}
+        <CustomInput
+          name="password"
           placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
+          rules={{ required: "Password is required" }}
+          control={control}
           secureTextEntry
         />
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
+        <TouchableOpacity
+          onPress={handleSubmit(handleLogin)}
+          style={styles.button}
+        >
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
@@ -90,5 +110,8 @@ const styles = StyleSheet.create({
     color: "#0782F9",
     fontWeight: "700",
     fontSize: 16,
+  },
+  errorMessage: {
+    color: "red",
   },
 });
