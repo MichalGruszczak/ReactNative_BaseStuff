@@ -1,13 +1,8 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import auth from "@react-native-firebase/auth";
 import React from "react";
 import { useForm, FieldValues } from "react-hook-form";
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as Yup from "yup";
 
 import CustomInput from "../../components/CustomInput/CustomInput";
@@ -32,7 +27,15 @@ const Login = () => {
 
   // TODO - with Firebase
   const handleLogin = (data: FieldValues) => {
-    console.log(JSON.stringify(data, null, 4));
+    auth()
+      .createUserWithEmailAndPassword(data.email, data.password)
+      .then(() => {
+        console.log("Logged In");
+      })
+      .catch((error) => {
+        Alert.alert(error.message);
+      });
+
     reset({
       email: "",
       password: "",
@@ -40,7 +43,7 @@ const Login = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <View style={styles.container}>
       <Text>Login Screen</Text>
       <View style={styles.inputContainer}>
         <CustomInput
@@ -67,7 +70,7 @@ const Login = () => {
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
