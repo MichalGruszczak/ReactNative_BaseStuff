@@ -1,14 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 import { CheckBox } from "@rneui/themed";
 import React, { useState } from "react";
 import { useForm, FieldValues } from "react-hook-form";
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
 import uuid from "react-native-uuid";
 import * as Yup from "yup";
 
@@ -59,8 +55,33 @@ const Register = () => {
       isAdmin,
     };
 
-    // TODO - registration logic from Firebase
-    console.log(registrationData);
+    auth()
+      .createUserWithEmailAndPassword(
+        registrationData.email,
+        registrationData.password
+      )
+      .then(() => {
+        firestore()
+          .collection("Users")
+          .add(registrationData)
+          .then(() => {
+            Alert.alert("User account created in database & signed in!");
+          })
+          .catch((error) => {
+            Alert.alert(`Firestore error: ${error.message}`);
+          });
+      })
+      .catch((error) => {
+        if (error.code === "auth/email-already-in-use") {
+          Alert.alert("That email address is already in use!");
+        }
+
+        if (error.code === "auth/invalid-email") {
+          Alert.alert("That email address is invalid!");
+        }
+
+        Alert.alert(`Registration error: ${error.message}`);
+      });
 
     reset({
       name: "",
@@ -71,7 +92,7 @@ const Register = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <View style={styles.container}>
       <Text>Register Screen</Text>
       <View style={styles.inputContainer}>
         <CustomInput
@@ -102,7 +123,7 @@ const Register = () => {
         />
         <CheckBox
           center
-          title="Click Here"
+          title="Are you Admin?"
           checked={isAdmin}
           onPress={() => setIsAdmin(!isAdmin)}
         />
@@ -116,7 +137,7 @@ const Register = () => {
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
