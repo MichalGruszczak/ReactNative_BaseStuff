@@ -1,5 +1,6 @@
+import auth from "@react-native-firebase/auth";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Login from "../screens/Login";
 import Register from "../screens/Register";
@@ -11,11 +12,25 @@ import TodoStack from "./stacks/TodoStack";
 // TODO - Zustand Provider with Auth state
 // TODO - LOGOUT
 
-const isAuth = false;
-
 const Tab = createBottomTabNavigator();
 
 const Navigator = () => {
+  const [isAuth, setIsAuth] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged((eventUser) => {
+      if (eventUser) {
+        setUser(eventUser);
+        setIsAuth(true);
+      } else {
+        setUser(null);
+        setIsAuth(false);
+      }
+    });
+    return subscriber;
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={{

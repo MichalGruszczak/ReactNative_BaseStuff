@@ -25,10 +25,9 @@ const Login = () => {
 
   const { errors } = formState;
 
-  // TODO - with Firebase
   const handleLogin = (data: FieldValues) => {
     auth()
-      .createUserWithEmailAndPassword(data.email, data.password)
+      .signInWithEmailAndPassword(data.email, data.password)
       .then(() => {
         console.log("Logged In");
       })
