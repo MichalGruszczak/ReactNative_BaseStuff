@@ -9,7 +9,7 @@ type TodoListProps = {
 
 const TodoList = ({ navigation }: TodoListProps) => {
   const openModal = () => {
-    console.log("Open Modal");
+    navigation.navigate("AddTodoModal");
   };
 
   return (
