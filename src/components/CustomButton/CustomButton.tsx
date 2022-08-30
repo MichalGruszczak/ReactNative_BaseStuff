@@ -8,6 +8,7 @@ type CustomButtonProps = {
   textColor?: string;
   width?: number;
   height?: number;
+  disabled?: boolean;
 };
 
 const CustomButton = ({
@@ -17,12 +18,18 @@ const CustomButton = ({
   textColor = "white",
   width = 150,
   height = 40,
+  disabled = false,
 }: CustomButtonProps) => {
   // ! Shouldn't use inline styling - it's bad for performance - but there is a problem with styled-components
   return (
     <TouchableOpacity
-      style={[styles.button, { backgroundColor, width, height }]}
+      style={[
+        styles.button,
+        { backgroundColor, width, height },
+        disabled && styles.disabled,
+      ]}
       onPress={onPress}
+      disabled={disabled}
     >
       <Text style={[styles.text, { color: textColor }]}>{text}</Text>
     </TouchableOpacity>
@@ -33,7 +40,7 @@ export default CustomButton;
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 10,
+    borderRadius: 6,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -42,5 +49,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  disabled: {
+    opacity: 0.3,
   },
 });
