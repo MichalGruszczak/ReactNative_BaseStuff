@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 
 import AddTodoModal from "../../screens/AddTodoModal";
+import EditTodoModal from "../../screens/EditTodoModal";
 import TodoItem from "../../screens/TodoItem";
 import TodoList from "../../screens/TodoList";
 
@@ -31,6 +32,13 @@ const TodoStack = () => {
           name="AddTodoModal"
           component={AddTodoModal}
           options={{ title: "Add Todo Modal", headerShown: false }}
+        />
+      </Stack.Group>
+      <Stack.Group screenOptions={{ presentation: "modal" }}>
+        <Stack.Screen
+          name="EditTodoModal"
+          component={EditTodoModal}
+          options={{ title: "Edit Todo Modal", headerShown: false }}
         />
       </Stack.Group>
     </Stack.Navigator>
