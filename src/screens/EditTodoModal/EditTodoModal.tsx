@@ -1,45 +1,51 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import firestore from "@react-native-firebase/firestore";
 import { CheckBox } from "@rneui/themed";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import { View, Button, StyleSheet, Text, Alert } from "react-native";
-import uuid from "react-native-uuid";
 import * as Yup from "yup";
 
 import CustomInput from "../../components/CustomInput/CustomInput";
 
-type AddTodoModalProps = {
+type EditTodoModalProps = {
   navigation: any;
+  route: any;
 };
 
-type AddTodoData = {
+type EditTodoData = {
   title: string;
   description?: string;
-  id: string;
   isImportant: boolean;
-  isDone: boolean;
 };
 
-const addTodoFormSchema = Yup.object().shape({
+const editTodoFormSchema = Yup.object().shape({
   title: Yup.string()
     .required("Title is required")
     .min(3, "Title length should be at least 3 characters"),
   description: Yup.string().max(300, "Must be max 300 characters"),
 });
 
-const addTodoFormValidationOptions = {
-  resolver: yupResolver(addTodoFormSchema),
+const editTodoFormValidationOptions = {
+  resolver: yupResolver(editTodoFormSchema),
 };
 
-const AddTodoModal = ({ navigation }: AddTodoModalProps) => {
+const EditTodoModal = ({ navigation, route }: EditTodoModalProps) => {
   const [isImportant, setIsImportant] = useState(false);
 
   const { control, handleSubmit, reset, formState } = useForm(
-    addTodoFormValidationOptions
+    editTodoFormValidationOptions
   );
 
   const { errors } = formState;
+
+  useEffect(() => {
+    reset({
+      title: route.params.title,
+      description: route.params.description,
+    });
+    setIsImportant(route.params.isImportant);
+  }, []);
 
   const closeModal = () => {
     navigation.goBack();
@@ -51,30 +57,31 @@ const AddTodoModal = ({ navigation }: AddTodoModalProps) => {
     setIsImportant(false);
   };
 
-  const handleSubmitAddTodo = (data: FieldValues) => {
-    const addTodoData: AddTodoData = {
+  const handleSubmitEditTodo = (data: FieldValues) => {
+    const editTodoData: EditTodoData = {
       title: data.title,
       description: data.description,
-      id: uuid.v4() as string,
       isImportant,
-      isDone: false,
     };
 
-    firestore()
-      .collection("Todos")
-      .add(addTodoData)
-      .then(() => {
-        Alert.alert("Todo added to database!");
-        closeModal();
-      })
-      .catch((error) => {
-        Alert.alert(`Firestore error: ${error.message}`);
-      });
+    // TODO - add logic for search and update todo in firestore
+    // firestore()
+    //   .collection("Todos")
+    //   .add(addTodoData)
+    //   .then(() => {
+    //     Alert.alert("Todo added to database!");
+    //     closeModal();
+    //   })
+    //   .catch((error) => {
+    //     Alert.alert(`Firestore error: ${error.message}`);
+    //   });
   };
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text style={styles.modalTitle}>Add Todo</Text>
+      <Text
+        style={styles.modalTitle}
+      >{`Edit Todo: "${route.params.title}"`}</Text>
       <View style={styles.inputContainer}>
         <CustomInput
           name="title"
@@ -88,7 +95,6 @@ const AddTodoModal = ({ navigation }: AddTodoModalProps) => {
           placeholder="Description"
           control={control}
         />
-
         <CheckBox
           center
           title="Is Important?"
@@ -100,7 +106,7 @@ const AddTodoModal = ({ navigation }: AddTodoModalProps) => {
         <Button color="red" onPress={closeModal} title="Dismiss" />
         <Button
           color="green"
-          onPress={handleSubmit(handleSubmitAddTodo)}
+          onPress={handleSubmit(handleSubmitEditTodo)}
           title="Submit"
         />
       </View>
@@ -108,7 +114,7 @@ const AddTodoModal = ({ navigation }: AddTodoModalProps) => {
   );
 };
 
-export default AddTodoModal;
+export default EditTodoModal;
 
 const styles = StyleSheet.create({
   buttonsContainer: {

@@ -18,8 +18,12 @@ const TodoListElement = ({
   isImportant,
   isDone,
 }: TodoListElementProps) => {
-  const editTodo = () => {
-    console.log("Edit Todo");
+  const openEditModal = () => {
+    navigation.navigate("EditTodoModal", {
+      title,
+      description,
+      isImportant,
+    });
   };
 
   const deleteTodo = () => {
@@ -67,7 +71,7 @@ const TodoListElement = ({
       </View>
       <View style={styles.buttonsSection}>
         <CustomButton
-          onPress={editTodo}
+          onPress={openEditModal}
           width={70}
           height={50}
           text="Edit"
