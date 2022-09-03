@@ -1,5 +1,6 @@
+import firestore from "@react-native-firebase/firestore";
 import React, { useMemo } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 
 import CustomButton from "../CustomButton/CustomButton";
 
@@ -9,6 +10,7 @@ type TodoListElementProps = {
   description?: string;
   isImportant: boolean;
   isDone: boolean;
+  id: string;
 };
 
 const TodoListElement = ({
@@ -17,17 +19,28 @@ const TodoListElement = ({
   description,
   isImportant,
   isDone,
+  id,
 }: TodoListElementProps) => {
   const openEditModal = () => {
     navigation.navigate("EditTodoModal", {
       title,
       description,
       isImportant,
+      id,
     });
   };
 
-  const deleteTodo = () => {
-    console.log("Delete Todo");
+  const deleteTodo = async () => {
+    await firestore()
+      .collection("Todos")
+      .doc(id)
+      .delete()
+      .then(() => {
+        Alert.alert("Todo deleted!");
+      })
+      .catch(() => {
+        Alert.alert("Something went wrong");
+      });
   };
 
   const moreInfo = () => {
@@ -39,8 +52,19 @@ const TodoListElement = ({
     });
   };
 
-  const markAsDone = () => {
-    console.log("Edit Todo");
+  const markAsDone = async () => {
+    await firestore()
+      .collection("Todos")
+      .doc(id)
+      .update({
+        isDone: true,
+      })
+      .then(() => {
+        Alert.alert("Todo finished!");
+      })
+      .catch(() => {
+        Alert.alert("Something went wrong");
+      });
   };
 
   const statusText = useMemo(() => {
@@ -84,7 +108,6 @@ const TodoListElement = ({
           height={50}
           text="Delete"
           backgroundColor="red"
-          disabled={isDone}
         />
         <CustomButton
           onPress={moreInfo}

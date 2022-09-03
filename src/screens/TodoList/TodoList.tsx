@@ -49,6 +49,7 @@ const TodoList = ({ navigation }: TodoListProps) => {
             description={item.description}
             isImportant={item.isImportant}
             isDone={item.isDone}
+            id={item.id}
           />
         )}
       />
