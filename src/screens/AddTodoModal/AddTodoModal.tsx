@@ -1,10 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import firestore from "@react-native-firebase/firestore";
 import { CheckBox } from "@rneui/themed";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import { View, Button, StyleSheet, Text, Alert } from "react-native";
-import uuid from "react-native-uuid";
 import * as Yup from "yup";
 
 import CustomInput from "../../components/CustomInput/CustomInput";
@@ -16,7 +15,6 @@ type AddTodoModalProps = {
 type AddTodoData = {
   title: string;
   description?: string;
-  id: string;
   isImportant: boolean;
   isDone: boolean;
 };
@@ -41,6 +39,13 @@ const AddTodoModal = ({ navigation }: AddTodoModalProps) => {
 
   const { errors } = formState;
 
+  useEffect(() => {
+    reset({
+      title: "",
+      description: "",
+    });
+  }, []);
+
   const closeModal = () => {
     navigation.goBack();
 
@@ -55,7 +60,6 @@ const AddTodoModal = ({ navigation }: AddTodoModalProps) => {
     const addTodoData: AddTodoData = {
       title: data.title,
       description: data.description,
-      id: uuid.v4() as string,
       isImportant,
       isDone: false,
     };

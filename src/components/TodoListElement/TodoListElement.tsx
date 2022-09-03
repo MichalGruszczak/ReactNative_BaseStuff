@@ -110,7 +110,7 @@ export default TodoListElement;
 
 const styles = StyleSheet.create({
   todo: {
-    width: "90%",
+    width: 360,
     height: 130,
     marginTop: 10,
     borderRadius: 6,
