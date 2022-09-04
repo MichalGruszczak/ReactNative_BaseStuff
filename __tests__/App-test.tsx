@@ -1,16 +1,7 @@
-/**
- * @format
- */
-
-import 'react-native';
-import React from 'react';
-import renderer from 'react-test-renderer';
-
-import App from '../App.tsx';
-
-// Note: test renderer must be required after react-native.
-
-// eslint-disable-next-line no-undef
-it('renders correctly', () => {
-  renderer.create(<App />);
+describe("Test 1", () => {
+  test("should 1 + 1 to be 2", () => {
+    expect(1 + 1).toEqual(2);
+  });
 });
+
+export {};
