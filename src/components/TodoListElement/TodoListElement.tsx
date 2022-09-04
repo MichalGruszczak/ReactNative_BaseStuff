@@ -1,6 +1,8 @@
+import firestore from "@react-native-firebase/firestore";
 import React, { useMemo } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 
+import useUser from "../../hooks/useUser";
 import CustomButton from "../CustomButton/CustomButton";
 
 type TodoListElementProps = {
@@ -9,6 +11,7 @@ type TodoListElementProps = {
   description?: string;
   isImportant: boolean;
   isDone: boolean;
+  id: string;
 };
 
 const TodoListElement = ({
@@ -17,17 +20,30 @@ const TodoListElement = ({
   description,
   isImportant,
   isDone,
+  id,
 }: TodoListElementProps) => {
+  const { user } = useUser();
+
   const openEditModal = () => {
     navigation.navigate("EditTodoModal", {
       title,
       description,
       isImportant,
+      id,
     });
   };
 
-  const deleteTodo = () => {
-    console.log("Delete Todo");
+  const deleteTodo = async () => {
+    await firestore()
+      .collection("Todos")
+      .doc(id)
+      .delete()
+      .then(() => {
+        Alert.alert("Todo deleted!");
+      })
+      .catch(() => {
+        Alert.alert("Something went wrong");
+      });
   };
 
   const moreInfo = () => {
@@ -39,8 +55,19 @@ const TodoListElement = ({
     });
   };
 
-  const markAsDone = () => {
-    console.log("Edit Todo");
+  const markAsDone = async () => {
+    await firestore()
+      .collection("Todos")
+      .doc(id)
+      .update({
+        isDone: true,
+      })
+      .then(() => {
+        Alert.alert("Todo finished!");
+      })
+      .catch(() => {
+        Alert.alert("Something went wrong");
+      });
   };
 
   const statusText = useMemo(() => {
@@ -76,7 +103,7 @@ const TodoListElement = ({
           height={50}
           text="Edit"
           backgroundColor="blue"
-          disabled={isDone}
+          disabled={isDone || !user.isAdmin}
         />
         <CustomButton
           onPress={deleteTodo}
@@ -84,7 +111,7 @@ const TodoListElement = ({
           height={50}
           text="Delete"
           backgroundColor="red"
-          disabled={isDone}
+          disabled={!user.isAdmin}
         />
         <CustomButton
           onPress={moreInfo}
@@ -99,7 +126,7 @@ const TodoListElement = ({
           height={50}
           text="Done"
           backgroundColor="green"
-          disabled={isDone}
+          disabled={isDone || !user.isAdmin}
         />
       </View>
     </View>
@@ -110,7 +137,7 @@ export default TodoListElement;
 
 const styles = StyleSheet.create({
   todo: {
-    width: "90%",
+    width: 360,
     height: 130,
     marginTop: 10,
     borderRadius: 6,

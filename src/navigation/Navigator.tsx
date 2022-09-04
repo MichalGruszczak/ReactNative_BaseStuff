@@ -1,4 +1,5 @@
 import auth from "@react-native-firebase/auth";
+import firestore, { firebase } from "@react-native-firebase/firestore";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useEffect } from "react";
 
@@ -20,11 +21,21 @@ const Navigator = () => {
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged((eventUser) => {
       if (eventUser) {
-        setUserOnAuth(eventUser);
-        setAuthTrue();
+        firestore()
+          .collection("Users")
+          .where("email", "==", eventUser.email)
+          .get()
+          .then((querySnapshot) => {
+            const queryUsers: any = [];
+            querySnapshot.docs.forEach((user) => {
+              queryUsers.push(user);
+            });
+            setUserOnAuth(queryUsers[0].data());
+            setAuthTrue();
+          });
       } else {
-        setUserOnLogout();
         setAuthFalse();
+        setUserOnLogout();
       }
     });
     return subscriber;

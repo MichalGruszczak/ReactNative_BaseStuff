@@ -1,36 +1,63 @@
-import React from "react";
-import { SafeAreaView, View, StyleSheet } from "react-native";
+import firestore from "@react-native-firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, View, StyleSheet, FlatList } from "react-native";
 
 import CustomButton from "../../components/CustomButton/CustomButton";
 import TodoListElement from "../../components/TodoListElement/TodoListElement";
+import useUser from "../../hooks/useUser";
 
 type TodoListProps = {
   navigation: any;
 };
 
 const TodoList = ({ navigation }: TodoListProps) => {
+  const [todos, setTodos] = useState<any>([]);
+
+  const { user } = useUser();
+
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection("Todos")
+      .onSnapshot((querySnapshot) => {
+        const list: any = [];
+        querySnapshot.forEach((doc) => {
+          const { title, description, isImportant, isDone } = doc.data();
+          list.push({
+            id: doc.id,
+            title,
+            description,
+            isImportant,
+            isDone,
+          });
+        });
+
+        setTodos(list);
+      });
+    return () => subscriber();
+  }, []);
+
   const openModal = () => {
     navigation.navigate("AddTodoModal");
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <TodoListElement
-        navigation={navigation}
-        title="Task 1"
-        description="Throwing consider dwelling bachelor joy her proposal laughter. Raptures returned disposed one entirely her men ham. By to admire vanity county an mutual as roused."
-        isImportant={false}
-        isDone={false}
-      />
-      <TodoListElement
-        navigation={navigation}
-        title="Task 2"
-        description="Yet bed any for travelling assistance indulgence unpleasing. Not thoughts all exercise blessing. Indulgence way everything joy alteration boisterous the attachment."
-        isImportant
-        isDone={false}
+      <FlatList
+        data={todos}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TodoListElement
+            navigation={navigation}
+            title={item.title}
+            description={item.description}
+            isImportant={item.isImportant}
+            isDone={item.isDone}
+            id={item.id}
+          />
+        )}
       />
       <View style={styles.addButton}>
-        <CustomButton onPress={openModal} text="Add" />
+        <CustomButton disabled={!user.isAdmin} onPress={openModal} text="Add" />
       </View>
     </SafeAreaView>
   );

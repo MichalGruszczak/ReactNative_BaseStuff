@@ -57,24 +57,28 @@ const EditTodoModal = ({ navigation, route }: EditTodoModalProps) => {
     setIsImportant(false);
   };
 
-  const handleSubmitEditTodo = (data: FieldValues) => {
+  const handleSubmitEditTodo = async (data: FieldValues) => {
     const editTodoData: EditTodoData = {
       title: data.title,
       description: data.description,
       isImportant,
     };
 
-    // TODO - add logic for search and update todo in firestore
-    // firestore()
-    //   .collection("Todos")
-    //   .add(addTodoData)
-    //   .then(() => {
-    //     Alert.alert("Todo added to database!");
-    //     closeModal();
-    //   })
-    //   .catch((error) => {
-    //     Alert.alert(`Firestore error: ${error.message}`);
-    //   });
+    await firestore()
+      .collection("Todos")
+      .doc(route.params.id)
+      .update({
+        title: editTodoData.title,
+        description: editTodoData.description,
+        isImportant: editTodoData.isImportant,
+      })
+      .then(() => {
+        Alert.alert("Todo updated!");
+        closeModal();
+      })
+      .catch(() => {
+        Alert.alert("Something went wrong");
+      });
   };
 
   return (
