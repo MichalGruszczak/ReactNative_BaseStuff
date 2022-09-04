@@ -2,6 +2,7 @@ import firestore from "@react-native-firebase/firestore";
 import React, { useMemo } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 
+import useUser from "../../hooks/useUser";
 import CustomButton from "../CustomButton/CustomButton";
 
 type TodoListElementProps = {
@@ -21,6 +22,8 @@ const TodoListElement = ({
   isDone,
   id,
 }: TodoListElementProps) => {
+  const { user } = useUser();
+
   const openEditModal = () => {
     navigation.navigate("EditTodoModal", {
       title,
@@ -100,7 +103,7 @@ const TodoListElement = ({
           height={50}
           text="Edit"
           backgroundColor="blue"
-          disabled={isDone}
+          disabled={isDone || !user.isAdmin}
         />
         <CustomButton
           onPress={deleteTodo}
@@ -108,6 +111,7 @@ const TodoListElement = ({
           height={50}
           text="Delete"
           backgroundColor="red"
+          disabled={!user.isAdmin}
         />
         <CustomButton
           onPress={moreInfo}
@@ -122,7 +126,7 @@ const TodoListElement = ({
           height={50}
           text="Done"
           backgroundColor="green"
-          disabled={isDone}
+          disabled={isDone || !user.isAdmin}
         />
       </View>
     </View>

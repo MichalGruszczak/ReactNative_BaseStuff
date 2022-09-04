@@ -4,6 +4,7 @@ import { SafeAreaView, View, StyleSheet, FlatList } from "react-native";
 
 import CustomButton from "../../components/CustomButton/CustomButton";
 import TodoListElement from "../../components/TodoListElement/TodoListElement";
+import useUser from "../../hooks/useUser";
 
 type TodoListProps = {
   navigation: any;
@@ -11,6 +12,8 @@ type TodoListProps = {
 
 const TodoList = ({ navigation }: TodoListProps) => {
   const [todos, setTodos] = useState<any>([]);
+
+  const { user } = useUser();
 
   useEffect(() => {
     const subscriber = firestore()
@@ -54,7 +57,7 @@ const TodoList = ({ navigation }: TodoListProps) => {
         )}
       />
       <View style={styles.addButton}>
-        <CustomButton onPress={openModal} text="Add" />
+        <CustomButton disabled={!user.isAdmin} onPress={openModal} text="Add" />
       </View>
     </SafeAreaView>
   );
