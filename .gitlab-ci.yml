@@ -8,7 +8,8 @@ stages:
 install:      
   stage: install
   script:
-    - mkdir npm install
+    - CI_PROJECT_DIR
+    - npm install
 
 unit-tests:      
   stage: test
