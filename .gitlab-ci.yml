@@ -13,12 +13,12 @@ install:
 unit-tests:      
   stage: test
   script:
-    - npm run test
+    - mkdir npm run test
 
 lint-test:   
   stage: lint    
   script:
-    - npm run lint
+    - mkdir npm run lint
 
 deploy:      
   stage: deploy
