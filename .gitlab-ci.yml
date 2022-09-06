@@ -24,7 +24,7 @@ lint-test:
 build-android:   
   stage: build    
   script:
-    - mkdir cd android
+    - cd android
     - mkdir ./gradlew assembleRelease
 
 deploy:      
