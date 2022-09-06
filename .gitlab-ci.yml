@@ -2,15 +2,13 @@ stages:
   - install
   - test
   - lint
-  - run
   - deploy
 
 
 install:      
   stage: install
   script:
-    - mkdir
-    - npm install
+    - mkdir npm install
 
 unit-tests:      
   stage: test
@@ -21,11 +19,6 @@ lint-test:
   stage: lint    
   script:
     - mkdir npm run lint
-
-run-ios:   
-  stage: run    
-  script:
-    - mkdir npm run ios
 
 deploy:      
   stage: deploy
