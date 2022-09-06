@@ -9,7 +9,7 @@ stages:
 install:      
   stage: install
   script:
-    - mkdir ./ 
+    - mkdir
     - npm install
 
 unit-tests:      
