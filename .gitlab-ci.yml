@@ -21,7 +21,7 @@ lint-test:
   script:
     - mkdir npm run lint
 
-lint-test:   
+build-android:   
   stage: build    
   script:
     - mkdir cd android
