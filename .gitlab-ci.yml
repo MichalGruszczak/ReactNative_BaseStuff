@@ -1,14 +1,14 @@
 stages:          
-  # - install
+  - install
   - test
   - lint
   - deploy
 
 
-# install-dependencies:      
-#   stage: install
-#   script:
-#     - npm install
+install:      
+  stage: install
+  script:
+    - npm install
 
 unit-tests:      
   stage: test
