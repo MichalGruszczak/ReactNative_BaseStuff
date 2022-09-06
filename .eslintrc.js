@@ -62,6 +62,7 @@ module.exports = {
     ],
     "react/jsx-closing-bracket-location": "off",
     "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
+    "@typescript-eslint/no-explicit-any": "off",
   },
   overrides: [
     {
