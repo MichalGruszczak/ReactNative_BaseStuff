@@ -29,7 +29,7 @@ const Login = () => {
     auth()
       .signInWithEmailAndPassword(data.email, data.password)
       .then(() => {
-        console.log("Logged In");
+        Alert.alert("Logged In");
       })
       .catch((error) => {
         Alert.alert(error.message);

@@ -1,5 +1,5 @@
 import auth from "@react-native-firebase/auth";
-import firestore, { firebase } from "@react-native-firebase/firestore";
+import firestore from "@react-native-firebase/firestore";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useEffect } from "react";
 
