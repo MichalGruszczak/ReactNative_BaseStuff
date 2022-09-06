@@ -5,22 +5,22 @@ stages:
   - deploy
 
 
-# install-dependencies-job:      
+# install-dependencies:      
 #   stage: install
 #   script:
 #     - npm install
 
-unit-tests-job:      
+unit-tests:      
   stage: test
   script:
     - npm run test
 
-lint-test-job:   
+lint-test:   
   stage: lint    
   script:
     - npm run lint
 
-deploy-job:      
+deploy:      
   stage: deploy
   environment: production
   script:
