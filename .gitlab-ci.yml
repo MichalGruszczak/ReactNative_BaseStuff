@@ -8,7 +8,7 @@ stages:
 install:      
   stage: install
   script:
-    - npm install
+    - mkdir npm install
 
 unit-tests:      
   stage: test
@@ -19,7 +19,6 @@ lint-test:
   stage: lint    
   script:
     - mkdir npm run lint
-
 
 deploy:      
   stage: deploy
