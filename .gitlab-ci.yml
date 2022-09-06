@@ -2,6 +2,7 @@ stages:
   - install
   - test
   - lint
+  - build
   - deploy
 
 
@@ -19,6 +20,12 @@ lint-test:
   stage: lint    
   script:
     - mkdir npm run lint
+
+lint-test:   
+  stage: build    
+  script:
+    - mkdir cd android
+    - ./gradlew assembleRelease
 
 deploy:      
   stage: deploy
