@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import analytics from "@react-native-firebase/analytics";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import { CheckBox } from "@rneui/themed";
@@ -44,6 +45,10 @@ const Register = () => {
   const { control, handleSubmit, reset, formState } =
     useForm(validationOptions);
 
+  const logRegisterSuccess = async () => {
+    await analytics().logEvent("firestore_register_success");
+  };
+
   const { errors } = formState;
 
   const handleRegister = (data: FieldValues) => {
@@ -66,6 +71,7 @@ const Register = () => {
           .add(registrationData)
           .then(() => {
             Alert.alert("User account created in database & signed in!");
+            logRegisterSuccess();
           })
           .catch((error) => {
             Alert.alert(`Firestore error: ${error.message}`);

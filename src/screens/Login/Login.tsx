@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import analytics from "@react-native-firebase/analytics";
 import auth from "@react-native-firebase/auth";
 import React from "react";
 import { useForm, FieldValues } from "react-hook-form";
@@ -25,11 +26,16 @@ const Login = () => {
 
   const { errors } = formState;
 
+  const logLoginSuccess = async () => {
+    await analytics().logEvent("Login_Success");
+  };
+
   const handleLogin = (data: FieldValues) => {
     auth()
       .signInWithEmailAndPassword(data.email, data.password)
       .then(() => {
         Alert.alert("Logged In");
+        logLoginSuccess();
       })
       .catch((error) => {
         Alert.alert(error.message);

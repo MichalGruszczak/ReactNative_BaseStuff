@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import analytics from "@react-native-firebase/analytics";
 import firestore from "@react-native-firebase/firestore";
 import { CheckBox } from "@rneui/themed";
 import React, { useState, useEffect } from "react";
@@ -17,6 +18,10 @@ type AddTodoData = {
   description?: string;
   isImportant: boolean;
   isDone: boolean;
+};
+
+const logAddTodo = async (title: string, isImportant: boolean) => {
+  analytics().logEvent("add_todo", { title, isImportant });
 };
 
 const addTodoFormSchema = Yup.object().shape({
@@ -69,6 +74,7 @@ const AddTodoModal = ({ navigation }: AddTodoModalProps) => {
       .add(addTodoData)
       .then(() => {
         Alert.alert("Todo added to database!");
+        logAddTodo(data.title, data.isImportant);
         closeModal();
       })
       .catch((error) => {

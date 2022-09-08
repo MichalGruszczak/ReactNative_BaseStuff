@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import analytics from "@react-native-firebase/analytics";
 import firestore from "@react-native-firebase/firestore";
 import { CheckBox } from "@rneui/themed";
 import React, { useState, useEffect } from "react";
@@ -17,6 +18,10 @@ type EditTodoData = {
   title: string;
   description?: string;
   isImportant: boolean;
+};
+
+const logEditTodo = async (title: string) => {
+  await analytics().logEvent("edit_todo", { title });
 };
 
 const editTodoFormSchema = Yup.object().shape({
@@ -74,6 +79,7 @@ const EditTodoModal = ({ navigation, route }: EditTodoModalProps) => {
       })
       .then(() => {
         Alert.alert("Todo updated!");
+        logEditTodo(editTodoData.title);
         closeModal();
       })
       .catch(() => {
