@@ -1,4 +1,5 @@
 import analytics from "@react-native-firebase/analytics";
+import crashlytics from "@react-native-firebase/crashlytics";
 import firestore from "@react-native-firebase/firestore";
 import React, { useMemo } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
@@ -56,8 +57,9 @@ const TodoListElement = ({
         Alert.alert("Todo deleted!");
         logDeleteTodo();
       })
-      .catch(() => {
+      .catch((error) => {
         Alert.alert("Something went wrong");
+        crashlytics().recordError(error);
       });
   };
 
@@ -81,8 +83,9 @@ const TodoListElement = ({
         Alert.alert("Todo finished!");
         logFinishTodo();
       })
-      .catch(() => {
+      .catch((error) => {
         Alert.alert("Something went wrong");
+        crashlytics().recordError(error);
       });
   };
 

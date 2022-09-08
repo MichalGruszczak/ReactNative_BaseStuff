@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import analytics from "@react-native-firebase/analytics";
+import crashlytics from "@react-native-firebase/crashlytics";
 import firestore from "@react-native-firebase/firestore";
 import { CheckBox } from "@rneui/themed";
 import React, { useState, useEffect } from "react";
@@ -79,6 +80,7 @@ const AddTodoModal = ({ navigation }: AddTodoModalProps) => {
       })
       .catch((error) => {
         Alert.alert(`Firestore error: ${error.message}`);
+        crashlytics().recordError(error);
       });
   };
 

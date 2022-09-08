@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import analytics from "@react-native-firebase/analytics";
 import auth from "@react-native-firebase/auth";
+import crashlytics from "@react-native-firebase/crashlytics";
 import firestore from "@react-native-firebase/firestore";
 import { CheckBox } from "@rneui/themed";
 import React, { useState } from "react";
@@ -75,11 +76,13 @@ const Register = () => {
           })
           .catch((error) => {
             Alert.alert(`Firestore error: ${error.message}`);
+            crashlytics().recordError(error);
           });
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
           Alert.alert("That email address is already in use!");
+          crashlytics().recordError(error);
         }
 
         if (error.code === "auth/invalid-email") {

@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import analytics from "@react-native-firebase/analytics";
+import crashlytics from "@react-native-firebase/crashlytics";
 import firestore from "@react-native-firebase/firestore";
 import { CheckBox } from "@rneui/themed";
 import React, { useState, useEffect } from "react";
@@ -82,8 +83,9 @@ const EditTodoModal = ({ navigation, route }: EditTodoModalProps) => {
         logEditTodo(editTodoData.title);
         closeModal();
       })
-      .catch(() => {
+      .catch((error) => {
         Alert.alert("Something went wrong");
+        crashlytics().recordError(error);
       });
   };
 

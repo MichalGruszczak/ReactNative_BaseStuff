@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import analytics from "@react-native-firebase/analytics";
 import auth from "@react-native-firebase/auth";
+import crashlytics from "@react-native-firebase/crashlytics";
 import React from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -39,6 +40,7 @@ const Login = () => {
       })
       .catch((error) => {
         Alert.alert(error.message);
+        crashlytics().recordError(error);
       });
 
     reset({
