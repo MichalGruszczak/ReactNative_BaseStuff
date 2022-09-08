@@ -1,5 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import analytics from "@react-native-firebase/analytics";
 import auth from "@react-native-firebase/auth";
+import crashlytics from "@react-native-firebase/crashlytics";
 import React from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -25,14 +27,20 @@ const Login = () => {
 
   const { errors } = formState;
 
+  const logLoginSuccess = async () => {
+    await analytics().logEvent("Login_Success");
+  };
+
   const handleLogin = (data: FieldValues) => {
     auth()
       .signInWithEmailAndPassword(data.email, data.password)
       .then(() => {
         Alert.alert("Logged In");
+        logLoginSuccess();
       })
       .catch((error) => {
         Alert.alert(error.message);
+        crashlytics().recordError(error);
       });
 
     reset({

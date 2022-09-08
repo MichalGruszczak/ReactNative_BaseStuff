@@ -1,3 +1,4 @@
+import analytics from "@react-native-firebase/analytics";
 import firestore from "@react-native-firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, View, StyleSheet, FlatList } from "react-native";
@@ -8,6 +9,10 @@ import useUser from "../../hooks/useUser";
 
 type TodoListProps = {
   navigation: any;
+};
+
+const logOpenModal = async () => {
+  await analytics().logEvent("open_modal", { modalType: "addTodo" });
 };
 
 const TodoList = ({ navigation }: TodoListProps) => {
@@ -38,6 +43,7 @@ const TodoList = ({ navigation }: TodoListProps) => {
 
   const openModal = () => {
     navigation.navigate("AddTodoModal");
+    logOpenModal();
   };
 
   return (

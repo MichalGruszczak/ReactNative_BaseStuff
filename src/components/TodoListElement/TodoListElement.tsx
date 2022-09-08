@@ -1,3 +1,5 @@
+import analytics from "@react-native-firebase/analytics";
+import crashlytics from "@react-native-firebase/crashlytics";
 import firestore from "@react-native-firebase/firestore";
 import React, { useMemo } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
@@ -12,6 +14,18 @@ type TodoListElementProps = {
   isImportant: boolean;
   isDone: boolean;
   id: string;
+};
+
+const logDeleteTodo = async () => {
+  await analytics().logEvent("delete_todo");
+};
+
+const logFinishTodo = async () => {
+  await analytics().logEvent("finish_todo");
+};
+
+const logOpenModal = async () => {
+  await analytics().logEvent("open_modal", { modalType: "editTodo" });
 };
 
 const TodoListElement = ({
@@ -31,6 +45,7 @@ const TodoListElement = ({
       isImportant,
       id,
     });
+    logOpenModal();
   };
 
   const deleteTodo = async () => {
@@ -40,9 +55,11 @@ const TodoListElement = ({
       .delete()
       .then(() => {
         Alert.alert("Todo deleted!");
+        logDeleteTodo();
       })
-      .catch(() => {
+      .catch((error) => {
         Alert.alert("Something went wrong");
+        crashlytics().recordError(error);
       });
   };
 
@@ -64,9 +81,11 @@ const TodoListElement = ({
       })
       .then(() => {
         Alert.alert("Todo finished!");
+        logFinishTodo();
       })
-      .catch(() => {
+      .catch((error) => {
         Alert.alert("Something went wrong");
+        crashlytics().recordError(error);
       });
   };
 
