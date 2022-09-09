@@ -5,6 +5,7 @@ import { SafeAreaView, View, StyleSheet, FlatList } from "react-native";
 
 import CustomButton from "../../components/CustomButton/CustomButton";
 import TodoListElement from "../../components/TodoListElement/TodoListElement";
+import colors from "../../constants/colors";
 import useUser from "../../hooks/useUser";
 
 type TodoListProps = {
@@ -63,7 +64,12 @@ const TodoList = ({ navigation }: TodoListProps) => {
         )}
       />
       <View style={styles.addButton}>
-        <CustomButton disabled={!user.isAdmin} onPress={openModal} text="Add" />
+        <CustomButton
+          backgroundColor={colors.customButton.background.add}
+          disabled={!user.isAdmin}
+          onPress={openModal}
+          text="Add"
+        />
       </View>
     </SafeAreaView>
   );

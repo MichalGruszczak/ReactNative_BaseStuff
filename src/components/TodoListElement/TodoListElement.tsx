@@ -4,6 +4,7 @@ import firestore from "@react-native-firebase/firestore";
 import React, { useMemo } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 
+import colors from "../../constants/colors";
 import useUser from "../../hooks/useUser";
 import CustomButton from "../CustomButton/CustomButton";
 
@@ -121,7 +122,7 @@ const TodoListElement = ({
           width={70}
           height={50}
           text="Edit"
-          backgroundColor="blue"
+          backgroundColor={colors.customButton.background.edit}
           disabled={isDone || !user.isAdmin}
         />
         <CustomButton
@@ -129,7 +130,7 @@ const TodoListElement = ({
           width={70}
           height={50}
           text="Delete"
-          backgroundColor="red"
+          backgroundColor={colors.customButton.background.delete}
           disabled={!user.isAdmin}
         />
         <CustomButton
@@ -137,14 +138,14 @@ const TodoListElement = ({
           width={70}
           height={50}
           text="More"
-          backgroundColor="purple"
+          backgroundColor={colors.customButton.background.more}
         />
         <CustomButton
           onPress={markAsDone}
           width={70}
           height={50}
           text="Done"
-          backgroundColor="green"
+          backgroundColor={colors.customButton.background.done}
           disabled={isDone || !user.isAdmin}
         />
       </View>
@@ -166,10 +167,10 @@ const styles = StyleSheet.create({
     borderColor: "grey",
   },
   todoImportant: {
-    backgroundColor: "#e8b923",
+    backgroundColor: colors.todoImportant,
   },
   todoDone: {
-    backgroundColor: "#90EE90",
+    backgroundColor: colors.todoDone,
   },
   titleSection: {
     flexBasis: 40,
