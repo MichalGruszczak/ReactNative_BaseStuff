@@ -2,13 +2,7 @@ import React from "react";
 import { Controller } from "react-hook-form";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 
-type CustomInputProps = {
-  control: any;
-  name: string;
-  error: any;
-  placeholder?: string;
-  secureTextEntry?: boolean;
-};
+import type { CustomInputProps } from "../../types/components";
 
 const CustomInput = ({
   control,

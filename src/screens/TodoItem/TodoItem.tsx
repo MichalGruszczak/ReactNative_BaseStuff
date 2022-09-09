@@ -1,6 +1,8 @@
 import React from "react";
 import { SafeAreaView, Text, Button, StyleSheet, View } from "react-native";
 
+import colors from "../../constants/colors";
+
 type TodoItemProps = {
   route: any;
   navigation: any;
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
   importantText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "red",
+    color: colors.text.important,
     textTransform: "uppercase",
   },
   isDoneInfoContainer: {
@@ -71,10 +73,10 @@ const styles = StyleSheet.create({
   isDoneInfoText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#ff4d04",
+    color: colors.text.taskNotDone,
   },
   doneText: {
-    color: "green",
+    color: colors.text.taskDone,
     textTransform: "uppercase",
   },
   buttonContainer: {

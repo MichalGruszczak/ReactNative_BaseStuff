@@ -1,5 +1,4 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import analytics from "@react-native-firebase/analytics";
 import auth from "@react-native-firebase/auth";
 import crashlytics from "@react-native-firebase/crashlytics";
 import React from "react";
@@ -8,6 +7,7 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as Yup from "yup";
 
 import CustomInput from "../../components/CustomInput/CustomInput";
+import { logLoginSuccess } from "../../utils/analytics";
 
 const loginFormSchema = Yup.object().shape({
   email: Yup.string()
@@ -26,10 +26,6 @@ const Login = () => {
     useForm(validationOptions);
 
   const { errors } = formState;
-
-  const logLoginSuccess = async () => {
-    await analytics().logEvent("Login_Success");
-  };
 
   const handleLogin = (data: FieldValues) => {
     auth()
