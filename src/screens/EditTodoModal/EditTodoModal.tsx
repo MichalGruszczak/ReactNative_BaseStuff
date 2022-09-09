@@ -9,16 +9,11 @@ import { View, Button, StyleSheet, Text, Alert } from "react-native";
 import * as Yup from "yup";
 
 import CustomInput from "../../components/CustomInput/CustomInput";
+import type { EditTodoData } from "../../types/todoActions";
 
 type EditTodoModalProps = {
   navigation: any;
   route: any;
-};
-
-type EditTodoData = {
-  title: string;
-  description?: string;
-  isImportant: boolean;
 };
 
 const logEditTodo = async (title: string) => {

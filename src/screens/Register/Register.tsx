@@ -11,14 +11,7 @@ import uuid from "react-native-uuid";
 import * as Yup from "yup";
 
 import CustomInput from "../../components/CustomInput/CustomInput";
-
-type RegistrationData = {
-  name: string;
-  email: string;
-  password: string;
-  id: string;
-  isAdmin: boolean;
-};
+import type { RegistrationData } from "../../types/auth";
 
 const registerFormSchema = Yup.object().shape({
   name: Yup.string()

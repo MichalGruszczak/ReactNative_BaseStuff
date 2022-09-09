@@ -6,16 +6,8 @@ import { View, Text, StyleSheet, Alert } from "react-native";
 
 import colors from "../../constants/colors";
 import useUser from "../../hooks/useUser";
+import type { TodoListElementProps } from "../../types/components";
 import CustomButton from "../CustomButton/CustomButton";
-
-type TodoListElementProps = {
-  navigation: any;
-  title: string;
-  description?: string;
-  isImportant: boolean;
-  isDone: boolean;
-  id: string;
-};
 
 const logDeleteTodo = async () => {
   await analytics().logEvent("delete_todo");
