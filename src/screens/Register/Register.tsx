@@ -1,5 +1,4 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import analytics from "@react-native-firebase/analytics";
 import auth from "@react-native-firebase/auth";
 import crashlytics from "@react-native-firebase/crashlytics";
 import firestore from "@react-native-firebase/firestore";
@@ -12,6 +11,7 @@ import * as Yup from "yup";
 
 import CustomInput from "../../components/CustomInput/CustomInput";
 import type { RegistrationData } from "../../types/auth";
+import { logRegisterSuccess } from "../../utils/analytics";
 
 const registerFormSchema = Yup.object().shape({
   name: Yup.string()
@@ -38,10 +38,6 @@ const Register = () => {
 
   const { control, handleSubmit, reset, formState } =
     useForm(validationOptions);
-
-  const logRegisterSuccess = async () => {
-    await analytics().logEvent("firestore_register_success");
-  };
 
   const { errors } = formState;
 

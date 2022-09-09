@@ -7,19 +7,12 @@ import { View, Text, StyleSheet, Alert } from "react-native";
 import colors from "../../constants/colors";
 import useUser from "../../hooks/useUser";
 import type { TodoListElementProps } from "../../types/components";
+import {
+  logOpenModal,
+  logDeleteTodo,
+  logFinishTodo,
+} from "../../utils/analytics";
 import CustomButton from "../CustomButton/CustomButton";
-
-const logDeleteTodo = async () => {
-  await analytics().logEvent("delete_todo");
-};
-
-const logFinishTodo = async () => {
-  await analytics().logEvent("finish_todo");
-};
-
-const logOpenModal = async () => {
-  await analytics().logEvent("open_modal", { modalType: "editTodo" });
-};
 
 const TodoListElement = ({
   navigation,
@@ -38,7 +31,7 @@ const TodoListElement = ({
       isImportant,
       id,
     });
-    logOpenModal();
+    logOpenModal("editTodo");
   };
 
   const deleteTodo = async () => {
