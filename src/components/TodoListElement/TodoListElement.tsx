@@ -1,4 +1,3 @@
-import analytics from "@react-native-firebase/analytics";
 import crashlytics from "@react-native-firebase/crashlytics";
 import firestore from "@react-native-firebase/firestore";
 import React, { useMemo } from "react";
